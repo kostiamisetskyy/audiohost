@@ -18,6 +18,7 @@ services:
   celeryworker:
     restart: unless-stopped
     image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
+    privileged: true
     depends_on:
       - postgres
       - redis
@@ -39,12 +40,13 @@ services:
     environment:
       - C_FORCE_ROOT=true
     volumes:
-      - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:ro"
+      - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:rw"
       - "${MEDIA_ROOT}:${MEDIA_ROOT}"
 
   celerybeat:
     restart: unless-stopped
     image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
+    privileged: true
     command:
       - celery
       - --app=funkwhale_api.taskapp
@@ -58,18 +60,20 @@ services:
   api:
     restart: unless-stopped
     image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
+    privileged: true
     depends_on:
       - postgres
       - redis
     env_file: .env
     volumes:
-      - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:ro"
+      - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:rw"
       - "${MEDIA_ROOT}:${MEDIA_ROOT}"
       - "${STATIC_ROOT}:${STATIC_ROOT}"
 
   front:
     restart: unless-stopped
     image: funkwhale/front:${FUNKWHALE_VERSION:-latest}
+    privileged: true
     depends_on:
       - api
     env_file:
