@@ -3,7 +3,7 @@ version: "3"
 services:
   postgres:
     restart: unless-stopped
-    env_file: stack.env
+    env_file: .env
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
     image: postgres:15-alpine
@@ -12,7 +12,7 @@ services:
 
   redis:
     restart: unless-stopped
-    env_file: stack.env
+    env_file: .env
     image: redis:7-alpine
     volumes:
       - ./data/redis:/data
@@ -23,7 +23,7 @@ services:
     depends_on:
       - postgres
       - redis
-    env_file: stack.env
+    env_file: .env
     # Celery workers handle background tasks (such file imports or federation
     # messaging). The more processes a worker gets, the more tasks
     # can be processed in parallel. However, more processes also means
@@ -63,7 +63,7 @@ services:
     depends_on:
       - postgres
       - redis
-    env_file: stack.env
+    env_file: .env
     volumes:
       - "${MUSIC_DIRECTORY_SERVE_PATH-/srv/funkwhale/data/music}:${MUSIC_DIRECTORY_PATH-/music}:ro"
       - "${MEDIA_ROOT}:${MEDIA_ROOT}"
@@ -75,7 +75,7 @@ services:
     depends_on:
       - api
     env_file:
-      - stack.env
+      - .env
     environment:
       # Override those variables in your .env file if needed
       - "NGINX_MAX_BODY_SIZE=${NGINX_MAX_BODY_SIZE-100M}"
@@ -96,7 +96,7 @@ services:
   typesense:
     restart: unless-stopped
     env_file:
-      - stack.env
+      - .env
     image: typesense/typesense:0.24.0
     volumes:
       - ./typesense/data:/data
