@@ -19,6 +19,7 @@ services:
     restart: unless-stopped
     image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
     privileged: true
+    user: 950:950
     depends_on:
       - postgres
       - redis
@@ -61,6 +62,7 @@ services:
     restart: unless-stopped
     image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
     privileged: true
+    user: 950:950
     depends_on:
       - postgres
       - redis
@@ -74,6 +76,7 @@ services:
     restart: unless-stopped
     image: funkwhale/front:${FUNKWHALE_VERSION:-latest}
     privileged: true
+    user: 950:950
     depends_on:
       - api
     env_file:
@@ -94,7 +97,6 @@ services:
     ports:
       # override those variables in your .env file if needed
       - "${FUNKWHALE_API_IP}:${FUNKWHALE_API_PORT}:80"
-
   typesense:
     restart: unless-stopped
     env_file:
