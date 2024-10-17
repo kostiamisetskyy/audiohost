@@ -80,9 +80,6 @@ services:
       - api
     env_file:
       - .env
-    environment:
-      # Override those variables in your .env file if needed
-      - "NGINX_MAX_BODY_SIZE=${NGINX_MAX_BODY_SIZE-10000M}"
     volumes:
       # Uncomment if you want to use your previous nginx config, please let us
       # know what special configuration you need, so we can support it with out
