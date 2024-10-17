@@ -1,6 +1,7 @@
 services:
   postgres:
     restart: unless-stopped
+    privileged: true
     env_file: .env
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
@@ -10,6 +11,7 @@ services:
 
   redis:
     restart: unless-stopped
+    privileged: true
     env_file: .env
     image: redis:7-alpine
     volumes:
@@ -19,7 +21,6 @@ services:
     restart: unless-stopped
     image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
     privileged: true
-    user: 950:950
     depends_on:
       - postgres
       - redis
@@ -62,7 +63,6 @@ services:
     restart: unless-stopped
     image: funkwhale/api:${FUNKWHALE_VERSION:-latest}
     privileged: true
-    user: 950:950
     depends_on:
       - postgres
       - redis
@@ -76,7 +76,6 @@ services:
     restart: unless-stopped
     image: funkwhale/front:${FUNKWHALE_VERSION:-latest}
     privileged: true
-    user: 950:950
     depends_on:
       - api
     env_file:
